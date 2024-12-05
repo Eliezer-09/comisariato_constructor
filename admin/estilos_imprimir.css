@@ -1,0 +1,46 @@
+/* Estilos generales de impresión */
+@media print {
+    body {
+        font-size: 12px;
+        color: black;
+    }
+
+    /* Asegúrate de que las imágenes y logos se muestren */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Asegúrate de que las tablas tengan buen espaciado */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+    /* Asegúrate de que se respeten los colores de los encabezados y las tablas */
+    .bg-danger {
+        background-color: #dc3545 !important;
+        color: white !important;
+    }
+
+    /* Estilos para ocultar elementos que no quieres imprimir, como botones o enlaces */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Ajustar el ancho de la página para que no se corte el contenido */
+    @page {
+        size: auto;
+        margin: 10mm;
+    }
+
+    /* Eliminar cualquier sombra o borde innecesario para impresión */
+    .card {
+        box-shadow: none !important;
+    }
+}
