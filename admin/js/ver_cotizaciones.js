@@ -113,6 +113,9 @@ $(document).ready(function () {
                                 <td class="text-center d-flex justify-content-center align-items-center">
                                     <a class="btn btn-md text-white fw-bold" style="background-color: #0f3d53" href="actualizar_cotizacion.php?q=${cotizacion.codigo_Orden}"><i class="far fa-edit"></i></a>
                                     <a class="btn btn-md text-white fw-bold ms-2" style="background-color: #e84e0f" href="ver_detalle.php?q=${cotizacion.codigo_Orden}"><i class="far fa-eye"></i></a>
+                                    <a class="btn btn-md text-white fw-bold ms-2 solicitar-descuento" style="background-color: #28a745" data-codigo-orden="${cotizacion.codigo_Orden}">
+                                        <i class="fas fa-percentage"></i>
+                                    </a>
                                 </td>
                             </tr>
                         `);
@@ -241,5 +244,15 @@ $(document).ready(function () {
 
     // Actualizar anchos al redimensionar ventana
     $(window).on('resize', syncWidths);
+
+    // Evento para el botón 'Descuento'
+    $('#listarCotizacion').on('click', '.solicitar-descuento', function() {
+        const codigoOrden = $(this).data('codigo-orden');
+        const codigoTienda = $("#codtienda").val(); // Obtener el código de tienda
+        const nombreCuenta = $("#idAdministrador").val(); // Obtener el nombre del vendedor
+
+        // Llamar a la función definida en descuento.js
+        solicitarDescuento(codigoOrden, codigoTienda, nombreCuenta);
+    });
 
 });

@@ -1288,6 +1288,47 @@ class DbHandler
 
         return $responseCategoria;
     }
+    
+    public function solicitarDescuento($numeroProforma, $codigoTienda, $nombreCuenta)
+    {
+
+        $token = $this->getTokenApi()["token"];
+
+        $curl = curl_init();
+
+        $data = array(
+            'Codemp' => '15', // Opcional, con valor por defecto
+            'Codsuc' => '15', // Opcional, con valor por defecto
+            'Tienda' => $codigoTienda,
+            'Numero' => (float)$numeroProforma,
+            'UsuarioSolicita' => $nombreCuenta // Reemplaza con el usuario que realiza la solicitud
+        );
+
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://192.168.1.199:14560/api/Descuentos/solicitar',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        // Decodificar la respuesta
+        $responseCotizacion = json_decode($response, true);
+        return $responseCotizacion;
+
+    }
 
     /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */
 }
