@@ -660,6 +660,18 @@ $app->post('/constructor/buscarCategorias', function ($request, $response) {
 });
 //BUSCAR FILTR
 
+$app->post('/constructor/solicitarDescuento', function($request, $response){
+    $numeroProforma = $request->getParsedBody()['numeroProforma'];
+    $codigoTienda = $request->getParsedBody()['codigoTienda'];
+    $nombreCuenta = $request->getParsedBody()['nombreCuenta'];
+    $response = array();
+    $db = new DbHandler();
+    $resultado = $db->solicitarDescuento($numeroProforma, $codigoTienda, $nombreCuenta);
+    $response["error"] = false;
+    $response["msg"] = $resultado;
+    echo json_encode($response);
+});
+
 /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */
 
 $app->run();

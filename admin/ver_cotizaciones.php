@@ -131,5 +131,5 @@ require 'includes/header2.php';
 <?php
 require 'includes/footer2.php';
 ?>
-
+<script src="js/descuento.js"></script>
 <script src="js/ver_cotizaciones.js"></script>

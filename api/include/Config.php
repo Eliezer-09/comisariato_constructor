@@ -12,7 +12,7 @@ define("DB_NAME", "abraldes"); */
 // define("DB_USERNAME", "bonsai");
 // define("DB_PASSWORD", "Bonsai!2017");
 define("DB_USERNAME", "root");
-define("DB_PASSWORD", "NuevaClaveSegura");
+define("DB_PASSWORD", "");
 define("DB_HOST", "localhost");
 define("DB_NAME", "constructor");
 
