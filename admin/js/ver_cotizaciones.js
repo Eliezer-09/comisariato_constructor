@@ -116,6 +116,9 @@ $(document).ready(function () {
                                     <a class="btn btn-md text-white fw-bold ms-2 solicitar-descuento" style="background-color: #28a745" data-codigo-orden="${cotizacion.codigo_Orden}">
                                         <i class="fas fa-percentage"></i>
                                     </a>
+                                    <a class="btn btn-md text-white fw-bold ms-2" style="background-color: #17a2b8" href="facturar.php?q=${cotizacion.codigo_Orden}">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                    </a>
                                 </td>
                             </tr>
                         `);
