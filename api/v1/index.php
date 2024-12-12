@@ -616,20 +616,19 @@ $app->post('/constructor/actualizar_cotizacionApi/', function ($request, $respon
 
 
 $app->post('/constructor/getCotizacionesApi', function ($request, $response, $args) {
-    // $id_administrador = $args['id'];
+    $parsedBody = $request->getParsedBody();
 
-    $codigoCotizacion   = $request->getParsedBody()['codigoCotizacion'];
-    $codigoTienda   = $request->getParsedBody()['codigoTienda'];
-    $codigoEmp   = $request->getParsedBody()['codigoEmp'];
-    $codigoSuc   = $request->getParsedBody()['codigoSuc'];
-    $rucCliente   = $request->getParsedBody()['rucCliente'];
-    $page   = $request->getParsedBody()['page'];
-    $pageSize   = $request->getParsedBody()['pageSize'];
-    $codigovendedor   = $request->getParsedBody()['codigovendedor'];
-    $nombreCliente   = $request->getParsedBody()['nombreCliente'];
-
-    $fechaInicio   = $request->getParsedBody()['fechaInicio'];
-    $fechaFin   = $request->getParsedBody()['fechaFin'];
+    $codigoCotizacion = $parsedBody['codigoCotizacion'] ?? null;
+    $codigoTienda = $parsedBody['codigoTienda'] ?? null;
+    $codigoEmp = $parsedBody['codigoEmp'] ?? null;
+    $codigoSuc = $parsedBody['codigoSuc'] ?? null;
+    $rucCliente = $parsedBody['rucCliente'] ?? null;
+    $page = $parsedBody['page'] ?? null;
+    $pageSize = $parsedBody['pageSize'] ?? null;
+    $codigovendedor = $parsedBody['codigovendedor'] ?? null;
+    $nombreCliente = $parsedBody['nombreCliente'] ?? null;
+    $fechaInicio = $parsedBody['fechaInicio'] ?? null;
+    $fechaFin = $parsedBody['fechaFin'] ?? null;
 
     $response = array();
     $db = new DbHandler();
@@ -637,8 +636,6 @@ $app->post('/constructor/getCotizacionesApi', function ($request, $response, $ar
 
     $response["error"] = false;
     $response["cotizacion"] = $resultado;
-
-    // $response["totalCotizacion"] = $db->getCotizacionesApiHeader($codigoCotizacion, $codigoTienda, $codigoEmp, $codigoSuc, $rucCliente);
 
     echo json_encode($response);
 });

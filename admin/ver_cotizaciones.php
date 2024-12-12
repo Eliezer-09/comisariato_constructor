@@ -9,6 +9,10 @@ require 'includes/header2.php';
         max-height: 700px;
         /* Define la altura máxima del contenedor */
     }
+    
+    .text-wrap {
+        white-space: normal;
+    }
 
     thead th {
         position: sticky;
@@ -39,7 +43,6 @@ require 'includes/header2.php';
 </style>
 
 <div class="content">
-
     <div class="d-flex justify-content-center align-items-center">
         <div class="content p-2" style="width: 85%">
             <div class="card mb-3">
@@ -51,7 +54,6 @@ require 'includes/header2.php';
                         </div>
                     </div>
                 </div>
-
                 <div class="p-2" data-list='{"valueNames":["name","email","age"],"page":5,"pagination":true}'>
                     <div class="row justify-content-between g-0">
                         <div class="mb-3 col-sm-5 col-lg-6">
@@ -94,10 +96,10 @@ require 'includes/header2.php';
                             <thead class="text-900" id="listBusquedaA">
                                 <tr>
                                     <th class="text-center bg-200" data-sort="name">Cliente</th>
-                                    <th class="text-center bg-200" data-sort="ruc">Número de Orden</th>
-                                    <th class="text-center bg-200" data-sort="email">Total de Productos</th>
+                                    <th class="text-center bg-200" data-sort="ruc"># Orden</th>
+                                    <th class="text-center bg-200" data-sort="email">Total de Ítems</th>
                                     <th class="text-center bg-200" data-sort="email">Subtotal</th>
-                                    <th class="text-center bg-200" data-sort="email">Monto IVA</th>
+                                    <th class="text-center bg-200" data-sort="email">IVA</th>
                                     <th class="text-center bg-200" data-sort="email">Total</th>
                                     <th class="text-center bg-200" data-sort="email">Método de Pago</th>
                                     <th class="text-center bg-200" data-sort="email">Fecha de Creación</th>
@@ -121,11 +123,8 @@ require 'includes/header2.php';
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
-
     </div>
 </div>
 <?php

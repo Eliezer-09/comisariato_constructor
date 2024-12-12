@@ -79,17 +79,17 @@ $(document).ready(function () {
                         });
                         monto_iva = subtotal * 0.15;
                         total = subtotal + monto_iva;
-                        const fechaConvertida = cotizacion.fecha.replace("T", " ").split(".")[0];
+                        const fechaConvertida = cotizacion.fecha.replace("T", " ").split(".")[0].slice(0, -3);
 
                         var metodo = ""
                         if (cotizacion.forma_Pago == "EF") {
                             metodo = `<span class="badge badge rounded-pill d-block badge-subtle-success">Efectivo<span class="ms-1 fas fa-dollar-sign" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "TR") {
-                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-warning">Transferencia Bancaria<span class="ms-1 fas fa-money-bill-transfer" data-fa-transform="shrink-2"></span></span>`
+                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-warning">Transferencia<br>Bancaria<span class="ms-1 fas fa-money-bill-transfer" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "TC") {
-                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-primary">Tarjeta de Crédito<span class="ms-1 fas fa-credit-card" data-fa-transform="shrink-2"></span></span>`
+                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-primary">Tarjeta de<br>Crédito<span class="ms-1 fas fa-credit-card" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "TD") {
-                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-secondary">Tarjeta de Débito<span class="ms-1 fas fa-credit-card" data-fa-transform="shrink-2"></span></span>`
+                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-secondary">Tarjeta de<br>Débito<span class="ms-1 fas fa-credit-card" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "NO") {
                             metodo = `<span class="badge badge rounded-pill d-block badge-subtle-success">Credito<span class="ms-1 fas fa-file-contract" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "VA") {
@@ -97,7 +97,7 @@ $(document).ready(function () {
                         } else if (cotizacion.forma_Pago == "CH") {
                             metodo = `<span class="badge badge rounded-pill d-block badge-subtle-info">Cheque<span class="ms-1 fas fa-money-check-pen" data-fa-transform="shrink-2"></span></span>`
                         } else if (cotizacion.forma_Pago == "Desconocido") {
-                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-warning">No Asignado<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>`
+                            metodo = `<span class="badge badge rounded-pill d-block badge-subtle-warning">No<br>Asignado<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>`
                         }
 
                         $('#listarCotizacion').append(`

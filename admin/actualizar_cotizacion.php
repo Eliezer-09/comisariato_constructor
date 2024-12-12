@@ -59,10 +59,6 @@ echo "<input class='form-control' type='hidden' id='numero_orden' value='$numero
                         </div>
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-between text-white" style="background: #e74011; color: #FFF;">
-                    <div class="fw-bold">Pago Total</div>
-                    <div class="fw-bold" id="montoTotal2"></div>
-                </div>
                 <div class="card-footer d-flex justify-content-end bg-light">
                     <button class="btn btn-lg" type="button" onclick="cotizarProductos()" id="btnCotizarProductos" style="background: #0f3d53; color: #FFF"><i class="far fa-money-bill-alt"></i> Actualizar</button>
                 </div>

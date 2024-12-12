@@ -21,7 +21,6 @@ include 'includes/header2.php';
                             </tr>
                         </tbody>
                     </table>
-
                     <div class="row mt-2 mb-2">
                         <div class="col-lg-12 bg-light p-2">
                             <h5 class="fw-semibold">Seleccionar Método de Pago</h5>
@@ -54,7 +53,6 @@ include 'includes/header2.php';
 
                         </div>
                     </div>
-
                     <div class="d-none">
                         <div class="row">
                             <div class="col-lg-12 bg-light p-2">
@@ -69,17 +67,10 @@ include 'includes/header2.php';
                                     <input class="form-check-input listIva" id="flexRadioIva2" type="radio" name="flexRadioIva" name="listIva" value="15" checked="" />
                                     <label class="form-check-label" for="flexRadioIva2">15% IVA</label>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <div class="card-footer d-flex justify-content-between text-white" style="background: #e74011; color: #FFF;">
-                    <div class="fw-bold">Pago Total</div>
-                    <div class="fw-bold" id="montoTotal2"></div>
-                </div>
-                
                 <div class="card-footer d-flex justify-content-end bg-light">
                     <button class="btn btn-lg me-2" type="button" onclick="cancelarProductos()" id="btnCotizarProductos" style="background: #e74011; color: #FFF"><i class="fas fa-times"></i> Cancelar</button>
                     <button class="btn btn-lg" type="button" onclick="cotizarProductos()" id="btnCotizarProductos" style="background: #0f3d53; color: #FFF"><i class="far fa-money-bill-alt"></i> Generar cotización</button>

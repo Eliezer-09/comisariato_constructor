@@ -169,6 +169,7 @@ function listarProductosCotizacion(detalleProductos) {
     document.getElementById('montoIVA15').textContent = `$${parseFloat(montoIVA15).toFixed(2)}`;
     document.getElementById('montoIVA5').textContent = `$${parseFloat(montoIVA5).toFixed(2)}`;
     document.getElementById('montoTotal').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
+    document.getElementById('monto').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
     document.getElementById('montoTotalG').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
 
 
