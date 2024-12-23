@@ -266,6 +266,21 @@ function cargarLineas() {
     });
 }
 
+function stock(codigoProducto) {
+    $.get("../api/v1/constructor/stock", { codigo: codigoProducto }, function (data) {
+        const stockData = JSON.parse(data);
+        let stockHtml = '<table class="table table-striped">';
+        stockHtml += '<thead><tr><th>Bodega</th><th>Stock Disponible</th></tr></thead><tbody>';
+        stockData.forEach(function (item) {
+            stockHtml += `<tr>
+                            <td>${item.bodega}</td>
+                            <td>${item.suma}</td>
+                          </tr>`;
+        });
+        stockHtml += '</tbody></table>';
+        $("#stockContent").html(stockHtml);
+    });
+}
 
 function cargarMarcas() {
     $.get("../api/v1/constructor/getMarcasApi", {}, function (returnedData) {
@@ -472,7 +487,7 @@ function getProductos(page = 1, perPage = 20) {
                                         <h5 class="fs-0 mb-2"><a class="text-dark fw-bold" href="#">${data.nombre}</a></h5>
                                         <p class="text-dark mt-1 mb-1"><a><span class="fw-bold"></a>${data.desc_ampl}</p>
                                         <h6 class="text-dark mt-1 mb-1"><a><span class="fw-bold">Código: </span></a>${data.codigo_Producto} ${data.codigo_Alterno ? `<a><span class="fw-bold"></span></a>(${data.codigo_Alterno})</h6>` : ''}
-                                        
+                                        <h6 class="text-dark mt-1 mb-1"><a><span class="fw-bold">Disponible: </span></a>${data.stockActual} <a href="#" onclick="stock('${codigo}')" data-bs-toggle="modal" data-bs-target="#stockModal"><span class="fas fa-search"></span></a></h6>                                
                                     </div>
                                 </div>
                                 <div class="row g-0 align-items-end">
@@ -482,6 +497,7 @@ function getProductos(page = 1, perPage = 20) {
                                             <p class="ms-2 mt-3 fs--1 text-700 d-flex justify-content-center align-items-center">Precios incluyen IVA</p>
                                         </h3>
                                     </div>
+                                    
                                 </div>
                                 <div class="row d-flex justify-content-center align-items-center">
                                     <div class="col-lg-12 m-2 d-flex justify-content-center align-items-center">
@@ -500,6 +516,26 @@ function getProductos(page = 1, perPage = 20) {
                     </div>   
                 `);
                 });
+                
+                // Modal HTML
+                $("body").append(`
+                    <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="stockModalLabel">Stock Disponible</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="stockContent"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    `);
 
                 updatePagination(page, totalProductos, perPage);
 
