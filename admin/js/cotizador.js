@@ -2,15 +2,12 @@ let currentPage = 1; // Página inicial
 let itemsPerPage = 20; // Número de productos a mostrar por defecto
 let totalPages = 0; // Total de páginas
 let cart = [];
-
 let selectedGroups = [];
 let selectedSubgroups = [];
 let selectedBrands = [];
 let selectedLineas = [];
-
 let inputTimeout; // Variable global para manejar el temporizador
 let emptyFieldTimeout; // Temporizador para 5 segundos
-
 let perPageFinal = 0
 let pageInicial = 0
 
@@ -266,6 +263,61 @@ function cargarLineas() {
     });
 }
 
+function stock(codigoProducto) {
+    // Mostrar el spinner mientras se carga el contenido
+    $("#loadingSpinner").removeClass("d-none");
+    $("#stockContent").addClass("d-none");
+
+    // Consumir el API para obtener los datos del stock
+    $.get("../api/v1/constructor/stock", { codigo: codigoProducto }, function (data) {
+        let stockData;
+
+        // Verificar si la respuesta necesita parsearse
+        try {
+            stockData = typeof data === "string" ? JSON.parse(data) : data;
+        } catch (error) {
+            console.error("Error al parsear el JSON:", error);
+            $("#stockContent").html('<p class="text-center text-danger">Error al procesar los datos del stock.</p>');
+            $("#stockContent").removeClass("d-none");
+            $("#loadingSpinner").addClass("d-none");
+            return;
+        }
+
+        // Verificar si hay datos
+        if (Array.isArray(stockData) && stockData.length > 0) {
+            let stockHtml = '<table class="table table-striped">';
+            stockHtml += '<thead><tr><th>Bodega</th><th>Stock Disponible</th></tr></thead><tbody>';
+
+            // Recorrer los datos y crear las filas
+            stockData.forEach(function (item) {
+                stockHtml += `<tr>
+                                <td>${item.bodega}</td>
+                                <td>${item.suma}</td>
+                              </tr>`;
+            });
+
+            stockHtml += '</tbody></table>';
+
+            // Insertar la tabla en el modal
+            $("#stockContent").html(stockHtml);
+
+            // Mostrar el contenido y ocultar el spinner
+            $("#stockContent").removeClass("d-none");
+            $("#loadingSpinner").addClass("d-none");
+        } else {
+            // No hay datos, mostrar un mensaje
+            $("#stockContent").html('<p class="text-center">No hay stock disponible para este producto.</p>');
+            $("#stockContent").removeClass("d-none");
+            $("#loadingSpinner").addClass("d-none");
+        }
+    }).fail(function () {
+        // Manejar errores en la solicitud
+        $("#stockContent").html('<p class="text-center text-danger">Error al cargar el stock. Inténtelo de nuevo más tarde.</p>');
+        $("#stockContent").removeClass("d-none");
+        $("#loadingSpinner").addClass("d-none");
+    });
+}
+
 
 function cargarMarcas() {
     $.get("../api/v1/constructor/getMarcasApi", {}, function (returnedData) {
@@ -452,54 +504,85 @@ function getProductos(page = 1, perPage = 20) {
 
             if (productos.productos && productos.productos.mssg != "No se encontraron productos con los criterios proporcionados.") {
                 productos.productos.forEach(function (data) {
-                    const codigo = String(data.codigo_Producto);
-                    const codigoAlterno = data.codigo_Alterno ? String(data.codigo_Alterno) : null;
-                    const imageUrl = `../imagen_productos/${data.codigo_Producto}.png`;
-                    const defaultImageUrl = '../imagen_productos/Artboard.webp';
-                    const nombreLimpio = data.nombre.replace(/["']/g, '');
+                        if (data.stockActual > 0) {
+                        const codigo = String(data.codigo_Producto);
+                        const codigoAlterno = data.codigo_Alterno ? String(data.codigo_Alterno) : null;
+                        const imageUrl = `../imagen_productos/${data.codigo_Producto}.png`;
+                        const defaultImageUrl = '../imagen_productos/Artboard.webp';
+                        const nombreLimpio = data.nombre.replace(/["']/g, '');
 
-                    $("#ListProductos").append(`
-                    <div class="col-md-4 col-xxl-3">
-                        <div class="card h-100 overflow-hidden">
-                            <div class="card-body p-0 d-flex flex-column justify-content-between">
-                                <div>
-                                    <div class="hoverbox text-center">
-                                        <a class="text-decoration-none text-center">
-                                            <img class="object-fit-cover img-expand" style="height: 250px; width: 250px" src="${imageUrl}" onerror="this.onerror=null; this.src='${defaultImageUrl}';"  alt="" />
-                                        </a>
+                        $("#ListProductos").append(`
+                        <div class="col-md-4 col-xxl-3">
+                            <div class="card h-100 overflow-hidden">
+                                <div class="card-body p-0 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="hoverbox text-center">
+                                            <a class="text-decoration-none text-center">
+                                                <img class="object-fit-cover img-expand" style="height: 250px; width: 250px" src="${imageUrl}" onerror="this.onerror=null; this.src='${defaultImageUrl}';"  alt="" />
+                                            </a>
+                                        </div>
+                                        <div class="p-1">
+                                            <h5 class="fs-0 mb-2"><a class="text-dark fw-bold" href="#">${data.nombre}</a></h5>
+                                            <p class="text-dark mt-1 mb-1"><a><span class="fw-bold"></a>${data.desc_ampl}</p>
+                                            <h6 class="text-dark mt-1 mb-1"><a><span class="fw-bold">Código: </span></a>${data.codigo_Producto} ${data.codigo_Alterno ? `<a><span class="fw-bold"></span></a>(${data.codigo_Alterno})</h6>` : ''}
+                                            <h6 class="text-dark mt-1 mb-1"><a><span class="fw-bold">Disponible: </span></a>${data.stockActual} <a href="#" onclick="stock('${codigo}')" data-bs-toggle="modal" data-bs-target="#stockModal"><span class="fas fa-search"></span></a></h6>                                
+                                        </div>
                                     </div>
-                                    <div class="p-1">
-                                        <h5 class="fs-0 mb-2"><a class="text-dark fw-bold" href="#">${data.nombre}</a></h5>
-                                        <p class="text-dark mt-1 mb-1"><a><span class="fw-bold"></a>${data.desc_ampl}</p>
-                                        <h6 class="text-dark mt-1 mb-1"><a><span class="fw-bold">Código: </span></a>${data.codigo_Producto} ${data.codigo_Alterno ? `<a><span class="fw-bold"></span></a>(${data.codigo_Alterno})</h6>` : ''}
+                                    <div class="row g-0 align-items-end">
+                                        <div class="col ps-3">
+                                            <h3 class="d-flex align-items-center">
+                                                <span style="color: #0f3d53" class="fe-bold">$${parseFloat(data.precio).toFixed(2)}</span>
+                                                <p class="ms-2 mt-3 fs--1 text-700 d-flex justify-content-center align-items-center">Precios incluyen IVA</p>
+                                            </h3>
+                                        </div>
                                         
                                     </div>
-                                </div>
-                                <div class="row g-0 align-items-end">
-                                    <div class="col ps-3">
-                                        <h3 class="d-flex align-items-center">
-                                            <span style="color: #0f3d53" class="fe-bold">$${parseFloat(data.precio).toFixed(2)}</span>
-                                            <p class="ms-2 mt-3 fs--1 text-700 d-flex justify-content-center align-items-center">Precios incluyen IVA</p>
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="row d-flex justify-content-center align-items-center">
-                                    <div class="col-lg-12 m-2 d-flex justify-content-center align-items-center">
-                                        <div class="input-group w-50" data-quantity="data-quantity">
-                                            <button class="btn btn-sm border-300 px-2 shadow-none" data-type="minus" onclick="updateQuantity(this, 'minus')" style="background: #e74011; color: #FFF; font-weight: bold">-</button>
-                                            <input class="form-control text-center px-2 input-spin-none" type="number" min="1" value="1" aria-label="Amount (to the nearest dollar)" style="width: 50px">
-                                            <button class="btn btn-sm border-300 px-2 shadow-none" data-type="plus" onclick="updateQuantity(this, 'plus')" style="background: #e74011; color: #FFF; font-weight: bold">+</button>
+                                    <div class="row d-flex justify-content-center align-items-center">
+                                        <div class="col-lg-12 m-2 d-flex justify-content-center align-items-center">
+                                            <div class="input-group w-50" data-quantity="data-quantity">
+                                                <button class="btn btn-sm border-300 px-2 shadow-none" data-type="minus" onclick="updateQuantity(this, 'minus')" style="background: #e74011; color: #FFF; font-weight: bold">-</button>
+                                                <input class="form-control text-center px-2 input-spin-none" type="number" min="1" value="1" aria-label="Amount (to the nearest dollar)" style="width: 50px">
+                                                <button class="btn btn-sm border-300 px-2 shadow-none" data-type="plus" onclick="updateQuantity(this, 'plus')" style="background: #e74011; color: #FFF; font-weight: bold">+</button>
+                                            </div>
+                                            <a class="btn ms-3 me-3" onclick="addToCart('${codigo}', parseInt(this.previousElementSibling.querySelector('input').value), ${data.precio}, '${nombreLimpio}', '${imageUrl}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Cart" style="background: #e74011; color: #FFF; font-weight: bold">
+                                                <span class="fas fa-cart-plus" data-fa-transform="down-2"></span>
+                                            </a>
                                         </div>
-                                        <a class="btn ms-3 me-3" onclick="addToCart('${codigo}', parseInt(this.previousElementSibling.querySelector('input').value), ${data.precio}, '${nombreLimpio}', '${imageUrl}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Cart" style="background: #e74011; color: #FFF; font-weight: bold">
-                                            <span class="fas fa-cart-plus" data-fa-transform="down-2"></span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>   
-                `);
+                        </div>   
+                    `);
+                    }
                 });
+                
+                // Modal HTML
+                $("body").append(`
+                    <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="stockModalLabel">Stock Disponible</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                                    <div id="loadingSpinner" class="text-center d-none">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </div>
+                                    <div id="stockContent" class="d-none">
+                                        <!-- Aquí se mostrará la tabla con los datos del stock -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    `);
 
                 updatePagination(page, totalProductos, perPage);
 
