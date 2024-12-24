@@ -5,6 +5,56 @@ include 'includes/header2.php';
 ?>
 
 <style>
+    .modal-body {
+    max-height: 500px; /* Limitar la altura del contenido */
+    overflow-y: auto; /* Scroll solo dentro del modal */
+    }
+    .table-striped {
+        border-collapse: collapse; /* Elimina espacios entre bordes */
+        width: 100%; /* Asegura que ocupe el ancho completo */
+    }
+
+    .table-striped th, .table-striped td {
+        text-align: left; /* Alinear contenido a la izquierda */
+        padding: 12px 15px;
+    }
+
+    .table-striped th {
+        background-color: #e84e0f; /* Color del encabezado */
+        color: #fff; /* Color del texto en el encabezado */
+        font-weight: bold;
+    }
+
+    .table-striped tr:nth-child(even) {
+        background-color: #f2f2f2; /* Color alternativo para las filas pares */
+    }
+
+    .table-striped tr:hover {
+        background-color: #d1ecf1; /* Color de hover para las filas */
+    }
+    .table-striped thead th {
+        /*position: sticky; /* Hace que el encabezado sea fijo */
+        top: -2; /* Lo fija en la parte superior */
+        background-color: #e84e0f; /* Asegura que el color de fondo permanezca visible */
+        color: #fff; /* Color del texto */
+        z-index: 1; /* Evita que se superponga al contenido */
+        text-align: left;
+        padding: 12px 15px;
+    }
+    .table-striped tbody tr:nth-child(even) {
+        background-color: #f9f9f9; /* Alterna el color de las filas */
+    }
+
+    .table-striped tbody tr:hover {
+        background-color: #d1ecf1; /* Color al pasar el ratón */
+    }                                                                                                       
+
+    .spinner-border {
+        margin: 20px auto; /* Centrar el spinner */
+        width: 3rem;
+        height: 3rem;
+    }
+
     .hoverbox {
         transition: transform 0.3s ease;
         display: inline-block;
