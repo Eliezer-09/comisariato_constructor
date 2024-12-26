@@ -407,6 +407,8 @@ $app->post('/constructor/getProductoApiBuscar', function ($request, $response) {
 
     echo json_encode($response);
 });
+
+
 //OBTENER TODOS LOS PRODUCTOS CON PRECIOS
 
 
@@ -667,6 +669,13 @@ $app->post('/constructor/solicitarDescuento', function($request, $response){
     $response["error"] = false;
     $response["msg"] = $resultado;
     echo json_encode($response);
+});
+
+$app->get('/constructor/stock', function ($request, $response, $args) {
+    $codigoProducto = $request->getQueryParams()['codigo'];
+    $db = new DbHandler();
+    $result = $db->stock($codigoProducto);
+    return $response->withJson($result);
 });
 
 /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */
