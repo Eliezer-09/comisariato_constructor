@@ -186,7 +186,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/auth/token',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/auth/token',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -226,7 +226,7 @@ class DbHandler
         ]);
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/auth/login',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/auth/login',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -270,7 +270,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Sucursales/buscar?codigo=15',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Sucursales/buscar?codigo=15',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -302,7 +302,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/grupos',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/grupos',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -335,7 +335,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/subgrupos',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/subgrupos',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -367,7 +367,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/lineas',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/lineas',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -399,7 +399,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/marcas',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/marcas',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -431,7 +431,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/tiendas',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/tiendas',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -463,7 +463,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Vendedores/buscar?CodigoVendedor=' . $codigo,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Vendedores/buscar?CodigoVendedor=' . $codigo,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -494,7 +494,7 @@ class DbHandler
         $token = $this->getTokenApi()["token"];
 
         // Construir la URL para la API de productos
-        $urlProducto = 'http://192.168.1.199:14560/api/Productos/buscar?Codigo_Empresa=' . $codigo_Empresa
+        $urlProducto = 'http://192.168.1.94:14460/api/Productos/buscar?Codigo_Empresa=' . $codigo_Empresa
             . '&Codigo_Sucursal=' . $codigo_Sucursal
             . '&page=' . $page
             . '&pageSize=' . $pageSize
@@ -587,7 +587,7 @@ class DbHandler
 
 
         // Construir la URL para la API de productos
-        $urlProducto = 'http://192.168.1.199:14560/api/Productos/buscar?Codigo_Empresa=' . $codigo_Empresa
+        $urlProducto = 'http://192.168.1.94:14460/api/Productos/buscar?Codigo_Empresa=' . $codigo_Empresa
             . '&Codigo_Sucursal=' . $codigo_Sucursal
             . '&page=' . $page
             . '&pageSize=' . $pageSize
@@ -667,7 +667,7 @@ class DbHandler
 
 
         // Primero buscar en la API de precios con el código de tienda
-        $urlPrecios = 'http://192.168.1.199:14560/api/Precios/buscar?codigoTienda=' . urlencode($codigo_Tienda) . '&codigoProducto=' . $codigo_Producto;
+        $urlPrecios = 'http://192.168.1.94:14460/api/Precios/buscar?codigoTienda=' . urlencode($codigo_Tienda) . '&codigoProducto=' . $codigo_Producto;
         // Realizar la solicitud a la API de precios
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -706,7 +706,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/buscar?ruc=' . $nombre_o_ruc . '&codigovendedor=' . $codigo_vendedor,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/buscar?ruc=' . $nombre_o_ruc . '&codigovendedor=' . $codigo_vendedor,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -757,13 +757,13 @@ class DbHandler
     // Función auxiliar para realizar la búsqueda por nombre
     public function buscarClienteApi($nombre, $token, $codigo_vendedor)
     {
-        return $this->realizarConsultaApi('http://192.168.1.199:14560/api/Clientes/buscar?nombre=' . urlencode($nombre), $token);
+        return $this->realizarConsultaApi('http://192.168.1.94:14460/api/Clientes/buscar?nombre=' . urlencode($nombre), $token);
     }
 
     // Función auxiliar para realizar la búsqueda por RUC
     public function buscarClienteApiPorRuc($ruc, $token, $codigo_vendedor)
     {
-        return $this->realizarConsultaApi('http://192.168.1.199:14560/api/Clientes/buscar?ruc=' . urlencode($ruc), $token);
+        return $this->realizarConsultaApi('http://192.168.1.94:14460/api/Clientes/buscar?ruc=' . urlencode($ruc), $token);
     }
 
     // Función genérica para realizar consultas a la API
@@ -798,7 +798,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/buscar?ruc=' . $ruc,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/buscar?ruc=' . $ruc,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -844,7 +844,7 @@ class DbHandler
         ]);
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/crear',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/crear',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -896,7 +896,7 @@ class DbHandler
         ]);
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/actualizar-contacto/' . $ruc,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/actualizar-contacto/' . $ruc,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -961,7 +961,7 @@ class DbHandler
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/buscar?ruc=' . $nombre_o_ruc . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigoVendedor,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/buscar?ruc=' . $nombre_o_ruc . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigoVendedor,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1020,7 +1020,7 @@ class DbHandler
         );
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Cotizacion/crear',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Cotizacion/crear',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1054,7 +1054,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Cotizacion/buscar?codigoCotizacion=' . $codigoCotizacion . '&rucCliente=' . $rucCliente . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigovendedor . '&nombreCliente=' . $nombreCliente . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFin,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Cotizacion/buscar?codigoCotizacion=' . $codigoCotizacion . '&rucCliente=' . $rucCliente . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigovendedor . '&nombreCliente=' . $nombreCliente . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFin,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1118,7 +1118,7 @@ class DbHandler
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Cotizacion/buscar?codigoTienda=' . $codigoTienda . '&codigoEmp=' . $codigoEmp . '&codigoSuc=' . $codigoSuc . '&codigoCotizacion=' . $codigoCotizacion . '&rucCliente=' . $rucCliente,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Cotizacion/buscar?codigoTienda=' . $codigoTienda . '&codigoEmp=' . $codigoEmp . '&codigoSuc=' . $codigoSuc . '&codigoCotizacion=' . $codigoCotizacion . '&rucCliente=' . $rucCliente,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1163,7 +1163,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Clientes/buscar?ruc=' . $ruc . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigoVendedor . '&nombre=' . $nombre,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Clientes/buscar?ruc=' . $ruc . '&page=' . $page . '&pageSize=' . $pageSize . '&codigovendedor=' . $codigoVendedor . '&nombre=' . $nombre,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1233,7 +1233,7 @@ class DbHandler
         );
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Cotizacion/actualizar/' . $numero_orden,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Cotizacion/actualizar/' . $numero_orden,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1266,7 +1266,7 @@ class DbHandler
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/DBTablas/buscarCategorias?grupos=' . $grupos . '&lineas=' . $lineas,
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/DBTablas/buscarCategorias?grupos=' . $grupos . '&lineas=' . $lineas,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1306,7 +1306,7 @@ class DbHandler
 
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://192.168.1.199:14560/api/Descuentos/solicitar',
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Descuentos/solicitar',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1332,7 +1332,7 @@ class DbHandler
 
     public function stock($producto)
     {
-        $urlProducto = 'http://192.168.1.199:14560/api/Productos/stock?codigoProducto=' . $producto;
+        $urlProducto = 'http://192.168.1.94:14460/api/Productos/stock?codigoProducto=' . $producto;
         $token = $this->getTokenApi()["token"];
         $curl = curl_init();
         curl_setopt_array($curl, array(

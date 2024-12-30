@@ -66,7 +66,7 @@ echo "<input type='hidden' class='form-control' id='numero_orden' value='$orden'
                         <h5 class="mb-2 mb-md-0">Orden #<?php echo $orden; ?></h5>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-sm me-1 mb-2 mb-sm-0 text-white fw-bold" style="background: #e84e0f" type="button" onclick="generarPDF()"><i class="far fa-file-pdf"></i> Download (.pdf)</button>
+                        <button class="btn btn-sm me-1 mb-2 mb-sm-0 text-white fw-bold" style="background: #e84e0f" type="button" onclick="generarPDF()"><i class="far fa-file-pdf"></i> Descargar (.pdf)</button>
                         <!-- <button class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" onclick="printDiv('invoiceDiv')">Print</button> -->
                         <a class="btn btn-falcon-primary btn-sm mb-2 mb-sm-0" type="button" href="cotizador.php"><i class="far fa-arrow-alt-circle-left"></i> Generar nueva cotización</a>
                     </div>

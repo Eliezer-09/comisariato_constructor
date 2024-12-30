@@ -26,7 +26,8 @@ let montoIVA15 = 0;
 let montoIVA5 = 0;
 let totalSinImpuestos = 0;
 let totalConImpuestos = 0;
-
+let descuento1 = 0;
+let descuento2 = 0;
 let totalDescuento = 0;
 
 $(document).ready(function () {
@@ -125,14 +126,18 @@ function listarProductosCotizacion(detalleProductos) {
     // Iterar sobre los productos en el detalle de la cotización
     detalleProductos.detalle.forEach(function (producto) {
         const precioNeto = producto.cantidad * parseFloat(producto.precio_Unidad);
-
+		
         cartPago.push({
+            cod: producto.codigo_Producto,
             nombre_producto: producto.nombre_Producto,
             cantidad: producto.cantidad,
+            desc1: producto.descuento1,
+            desc2: producto.descuento2,
+            desc3: producto.descuento3,
+            precio: producto.precio,
             precio_unitario: producto.precio_Unidad,
             precioNeto: precioNeto
         });
-
         // Agrupar subtotales en función del porcentaje de IVA
         if (producto.porcentaje_IVA === 15) {
             subtotal15 += precioNeto;
@@ -141,7 +146,6 @@ function listarProductosCotizacion(detalleProductos) {
         } else if (producto.porcentaje_IVA === 0) {
             subtotal0 += precioNeto;
         }
-
         // Generar el HTML para cada producto
         productosHTML += `
             <tr>
@@ -169,7 +173,6 @@ function listarProductosCotizacion(detalleProductos) {
     document.getElementById('montoIVA15').textContent = `$${parseFloat(montoIVA15).toFixed(2)}`;
     document.getElementById('montoIVA5').textContent = `$${parseFloat(montoIVA5).toFixed(2)}`;
     document.getElementById('montoTotal').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
-    document.getElementById('monto').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
     document.getElementById('montoTotalG').textContent = `$${parseFloat(totalConImpuestos).toFixed(2)}`;
 
 
@@ -257,44 +260,103 @@ function generarPDF() {
         doc.setFont('Helvetica', 'bold');
 		doc.text(`${numero_orden}`, 110, 37, { align: 'left' });
         // Tabla de productos
+        let columns = [];
+        let descuento = null;
         let body = [];
         cartPago.forEach(producto => {
             const precioNeto = producto.cantidad * producto.precio_unitario;
-            body.push([
-                producto.nombre_producto,
-                producto.cantidad,
-                `$${parseFloat(producto.precio_unitario).toFixed(2)}`,
-                `$${parseFloat(precioNeto).toFixed(2)}`
-            ]);
-        });
-
-        doc.autoTable({
-        	startY: 70,
-        	head: [['Nombre del Producto', 'Cantidad', 'Precio Unitario', 'Precio Neto']],
-        	body: body,
-        	theme: 'grid',
-        	styles: { fontSize: 8 },
-        	headStyles: { 
-            fillColor: [227, 67, 28],
-            halign: 'center'
-       		 }, // Naranja
-        	alternateRowStyles: { fillColor: [240, 240, 240] },
-        	columnStyles: {
-            	0: { halign: 'left' },  // Nombre del Producto
-            	1: { halign: 'center' }, // Cantidad
-            	2: { halign: 'right' }, // Precio Unitario
-            	3: { halign: 'right' }  // Precio Neto
-        },
-        didDrawPage: function (data) {
-            addHeader(doc);
-        },
-        didDrawCell: function (data) {
-            if (data.row.index === data.table.body.length - 1) {
-                const startY = doc.lastAutoTable.finalY + 5;
-                addFooter(doc, startY);
+            const precio = producto.cantidad * producto.precio;
+            descuento = producto.desc3;
+            if (descuento !== null) {
+                body.push([
+                    producto.cod,
+                    producto.nombre_producto,
+                    producto.cantidad,
+                    `$${parseFloat(producto.precio).toFixed(2)}`,
+                    `$${parseFloat(precio).toFixed(2)}`,
+                    producto.desc1,
+                    producto.desc2,
+                    producto.desc3,
+                    `$${parseFloat(precioNeto).toFixed(2)}`
+                ]);
+                doc.autoTable({
+                    startY: 70,
+                    head: [['Codigo', 'Nombre del Producto', 'Cantidad', 'Precio Unitario', 'Subtotal', 'Dscto 1', 'Dscto 2', 'Dscto 3', 'Valor Total']],
+                    body: body,
+                    theme: 'grid',
+                    styles: { fontSize: 8 },
+                    headStyles: { 
+                    fillColor: [227, 67, 28],
+                    halign: 'center'
+                        }, // Naranja
+                    alternateRowStyles: { fillColor: [240, 240, 240] },
+                    columnStyles: {
+                        0: { halign: 'center' },  // codigo
+                        1: { halign: 'left' }, // Nombre del Producto
+                        2: { halign: 'center' }, // Cantidad
+                        3: { halign: 'right' },  // Precio
+                        4: { halign: 'right' }, // Subtotal
+                        5: { halign: 'center' }, // Descuento 1
+                        6: { halign: 'center' }, // Descuento 2
+                        7: { halign: 'center' }, // Descuento 3
+                        8: { halign: 'right' }  // Precio Neto
+                },
+                didDrawPage: function (data) {
+                    addHeader(doc);
+                },
+                didDrawCell: function (data) {
+                    if (data.row.index === data.table.body.length - 1) {
+                        const startY = doc.lastAutoTable.finalY + 5;
+                        addFooter(doc, startY);
+                    }
+                }
+                });
+            }else{
+                body.push([
+                    producto.cod,
+                    producto.nombre_producto,
+                    producto.cantidad,
+                    `$${parseFloat(producto.precio).toFixed(2)}`,
+                    `$${parseFloat(precio).toFixed(2)}`,
+                    producto.desc1,
+                    producto.desc2,
+                    `$${parseFloat(precioNeto).toFixed(2)}`
+                ]);
+                doc.autoTable({
+                    startY: 70,
+                    head: [['Codigo', 'Nombre del Producto', 'Cantidad', 'Precio Unitario', 'Subtotal', 'Dscto 1', 'Dscto 2', 'Valor Total']],
+                    body: body,
+                    theme: 'grid',
+                    styles: { fontSize: 8 },
+                    headStyles: { 
+                    fillColor: [227, 67, 28],
+                    halign: 'center'
+                        }, // Naranja
+                    alternateRowStyles: { fillColor: [240, 240, 240] },
+                    columnStyles: {
+                        0: { halign: 'center' },  // codigo
+                        1: { halign: 'left' }, // Nombre del Producto
+                        2: { halign: 'center' }, // Cantidad
+                        3: { halign: 'right' },  // Precio
+                        4: { halign: 'right' }, // Subtotal
+                        5: { halign: 'center' }, // Descuento 1
+                        6: { halign: 'center' }, // Descuento 2
+                        7: { halign: 'right' }  // Precio Neto
+                },
+                didDrawPage: function (data) {
+                    addHeader(doc);
+                },
+                didDrawCell: function (data) {
+                    if (data.row.index === data.table.body.length - 1) {
+                        const startY = doc.lastAutoTable.finalY + 5;
+                        addFooter(doc, startY);
+                    }
+                }
+                });
             }
-        }
-    	});
+        });
+		
+
     	// Totales
 		const startY = doc.lastAutoTable.finalY + 5;
 		const netPriceX = 195; // Ajusta esta coordenada según la posición de "Precio Neto"
