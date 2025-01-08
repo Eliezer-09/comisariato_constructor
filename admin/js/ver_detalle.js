@@ -17,6 +17,7 @@ var fechaPago = ""
 var numero_orden = $("#numero_orden").val()
 var nombre_vendedor = ""
 var nombre_tienda = ""
+var numero_tienda = ""
 var dire_tienda = ""
 let corporativo = 0;
 let subtotal15 = 0;
@@ -97,6 +98,7 @@ $(document).ready(function () {
         	corporativo = cotizacion.corporativo
             nombre_vendedor = cotizacion.nombre_Vendedor
             nombre_tienda = cotizacion.nombre_tienda
+            numero_tienda = cotizacion.numero_tienda
         	dire_tienda = cotizacion.direccion_tienda
             // Mostrar el descuento
             document.getElementById('descuento').textContent = `Su descuento es: $${cotizacion.descuento.toFixed(2)}`;
@@ -214,7 +216,7 @@ function generarPDF() {
         doc.text('COMISARIATO DEL CONSTRUCTOR S.A.', 105, 15, { align: 'center' });
         doc.setFontSize(10);
         doc.text('RUC: 0992708328001', 105, 20, { align: 'center' });
-        doc.text(`Sucursal: ${nombre_tienda}`, 105, 25, { align: 'center' });
+        doc.text(`Sucursal: ${nombre_tienda} - Telf: ${numero_tienda}`, 105, 25, { align: 'center' });
         doc.text(`${dire_tienda}`, 105, 30, { align: 'center' });
  	  }
 

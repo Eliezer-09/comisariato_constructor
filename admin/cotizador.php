@@ -141,7 +141,7 @@ include 'includes/header2.php';
                         <div class="col-xl-6 col-lg-6 col-md-6">
                             <div class="col-auto d-none d-lg-block"><small class="fw-semi-bold">Búsqueda de producto:</small></div>
                             <div class="position-relative">
-                                <input class="form-control form-control search-input lh-1 rounded-2 ps-4" type="text" placeholder="Buscar por nombre o código" id="searchInput" />
+                                <input class="form-control form-control search-input lh-1 rounded-2 ps-4" type="text" placeholder="Buscar por nombre o código" id="searchInput" oninput="this.value = this.value.toUpperCase()"/>
                                 <div class="position-absolute top-50 start-0 translate-middle-y ms-2"><span class="fas fa-search text-400 fs--1"></span></div>
                             </div>
                             <div class="form-check form-check-inline">

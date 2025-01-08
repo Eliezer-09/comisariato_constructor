@@ -466,9 +466,9 @@ function actualizarCliente() {
 
 // Función para validar que solo se ingrese letras en el nombre y que la primera letra sea mayúscula
 function validarNombreCliente(input) {
-    input.value = input.value.toUpperCase().replace(/[^A-Z\s]/g, '');
-
+    input.value = input.value.toUpperCase().replace(/[^A-ZÑ\s]/g, '');
 }
+
 
 
 function validarRUC(ruc) {
