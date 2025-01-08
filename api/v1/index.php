@@ -595,8 +595,6 @@ $app->post('/constructor/guardar_cotizacionApi/', function ($request, $response)
 
 /* ACTUALIZAR COTIZACIÓN */
 $app->post('/constructor/actualizar_cotizacionApi/', function ($request, $response) {
-
-
     $codigo_Cliente = $request->getParsedBody()['codigo_Cliente'];
     $detalle = $request->getParsedBody()['detalle'];
     $forma_Pago = $request->getParsedBody()['forma_Pago'];
@@ -676,6 +674,23 @@ $app->get('/constructor/stock', function ($request, $response, $args) {
     $db = new DbHandler();
     $result = $db->stock($codigoProducto);
     return $response->withJson($result);
+});
+
+$app->post('/constructor/facturar', function ($request, $response) {
+    $numeroCotizacion = $request->getParsedBody()['numeroCotizacion'];
+    $codigo_Cliente   = $request->getParsedBody()['codigo_Cliente'];
+    $bodega           = $request->getParsedBody()['bodega'];
+    $metodoPago       = $request->getParsedBody()['metodoPago'];
+    $cobrador         = $request->getParsedBody()['cobrador'];
+
+    $response = array();
+    $db = new DbHandler();
+    $resultado = $db->crearFacturaApi($numeroCotizacion, $codigo_Cliente, $bodega, $metodoPago, $cobrador);
+
+    $response["error"] = false;
+    $response["numeroFactura"] = isset($resultado["numeroFactura"]) ? $resultado["numeroFactura"] : null;
+
+    echo json_encode($response);
 });
 
 /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */

@@ -60,7 +60,7 @@ echo "<input class='form-control' type='hidden' id='numero_orden' value='$numero
                     <div class="fw-bold" id="monto"></div>
                 </div>
                 <div class="card-footer d-flex justify-content-end bg-light">
-                    <button class="btn btn-lg" type="button" onclick="cotizarProductos()" id="btnCotizarProductos" style="background: #0f3d53; color: #FFF"><i class="far fa-money-bill-alt"></i> Generar Factura</button>
+                    <button class="btn btn-lg" type="button" onclick="facturarProductos()" id="btnfacturarProductos" style="background: #0f3d53; color: #FFF"><i class="far fa-money-bill-alt"></i> Generar Factura</button>
                 </div>
             </div>
         </div>

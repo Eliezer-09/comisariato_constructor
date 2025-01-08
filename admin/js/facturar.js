@@ -6,7 +6,7 @@ let cartPago = [];
 let SubtotalPago = [];
 let MontoIVAPago = [];
 let totalPago = [];
-
+let cantidad = [];
 let selectedGroups = [];
 let selectedSubgroups = [];
 let selectedBrands = [];
@@ -187,7 +187,7 @@ $(document).ready(function () {
             const now = new Date().getTime();
             if (now - cartTimestamp < 30 * 60 * 1000) {
                 cart = savedCart;
-                $("#btnCotizarProductos").css("display", "block");
+                $("#btnfacturarProductos").css("display", "block");
             }
 
 
@@ -224,7 +224,11 @@ $(document).ready(function () {
 
 })
 
-
+function setInitialCantidad(cat, ind) {
+    if (!cantidad[ind]) {
+      cantidad[ind] = cat;
+    }
+}
 
 
 function getProductos() {
@@ -249,11 +253,16 @@ function getProductos() {
     // Obtener el método de pago y el IVA seleccionado
     const metodoPago = document.querySelector('input[name="flexRadioDefault"]:checked').value;
     const productosEnCarrito = JSON.parse(sessionStorage.getItem('cartUpdate')) || [];
+    productosEnCarrito.map((producto, index) => 
+        setInitialCantidad(producto.cantidad, index)
+    );
 
     const defaultImageUrl = '../imagen_productos/Imagen_no_disponible.png'; // Ruta de la imagen alternativa
 
     // Generar HTML inicial para los productos del carrito si aún no está generado
-    let listaHTML = productosEnCarrito.map((producto, index) => `
+    let listaHTML = productosEnCarrito.map((producto, index) => 
+        
+        `
         <div class="row gx-card mx-0 align-items-center border-bottom border-200" id="producto-${index}">
             <div class="col-6 py-3">
                 <div class="d-flex align-items-center">
@@ -269,7 +278,9 @@ function getProductos() {
                     <div class="col-md-4 d-flex justify-content-end justify-content-md-center order-1 order-md-0">
                         <div>
                             <div class="input-group input-group-sm flex-nowrap" data-quantity="data-quantity">
+                                <button  class="btn btn-sm border-300 px-2 shadow-none" onclick="updateQuantity(${index}, 'minus', ${cantidad[index]})" style="background: #e74011; color: #FFF;">-</button>                            
                                 <span class="form-control text-center px-2" style="width: 50px" id="cantidad-${index}">${producto.cantidad}</span>
+                                <button class="btn btn-sm border-300 px-2 shadow-none" onclick="updateQuantity(${index}, 'plus')" style="background: #e74011; color: #FFF;">+</button>
                             </div>
                         </div>
                     </div>
@@ -480,15 +491,13 @@ function updateQuantity(index, action, value) {
 
     if (action === 'plus') {
         cantidadActual++;
-    } else if (action === 'minus' && cantidadActual > 1) {
+    } else if (action === 'minus' && cantidadActual > value) {
         cantidadActual--;
-    } else if (action === 'set') {
-        cantidadActual = parseInt(value);
-        if (isNaN(cantidadActual) || cantidadActual < 1) cantidadActual = 1;
+    }else if (action === 'minus' && cantidadActual <= value) {
+        return;
     }
 
     productosEnCarrito[index].cantidad = cantidadActual;
-
     // Actualizar el carrito en sessionStorage
     sessionStorage.setItem('cartUpdate', JSON.stringify(productosEnCarrito));
 
@@ -523,73 +532,75 @@ function eliminarProducto(index) {
 }
 
 
-function cotizarProductos() {
+function facturarProductos() {
     const metodoPago = document.querySelector('input[name="flexRadioDefault"]:checked').value;
-    const idClienteGuardado = sessionStorage.getItem('id_clienteUpdate'); // Obtener id_cliente del sessionStorage
+    const idClienteGuardado = sessionStorage.getItem('id_clienteUpdate');
 
-    if (!idClienteGuardado) {  // Validación si no existe idClienteGuardado o está vacío
+    if (!idClienteGuardado) {
         Swal.fire({
             title: "Comisariato del Constructor",
             text: "No existen clientes seleccionados!",
             icon: "warning",
-            showCancelButton: false,
             confirmButtonColor: "#3085d6",
             confirmButtonText: "Ok!"
         });
-    } else if (cartPago.length === 0) {  // Validación si el carrito está vacío
+        return;
+    }
+
+    if (cartPago.length === 0) {
         Swal.fire({
             title: "Comisariato del Constructor",
             text: "No existen productos seleccionados!",
             icon: "warning",
-            showCancelButton: false,
             confirmButtonColor: "#3085d6",
             confirmButtonText: "Ok!"
         });
-    } else {
-
-        console.log(cartPago)
-        // Filtrar solo los campos "Codigo_Producto" y "cantidad" de cada objeto en cartPago
-        const detalle = cartPago.map(item => ({
-            codigo_Producto: item.Codigo_Producto,
-            cantidad: item.cantidad
-        }));
-
-        $.post("../api/v1/constructor/actualizar_cotizacionApi/", {
-            codigo_Cliente: idClienteGuardado,
-            detalle: detalle,
-            forma_Pago: metodoPago,
-            codemp: $("#codemp").val(),
-            codsuc: $("#codsuc").val(),
-            codigo_Tienda: $("#codtienda").val(),
-            codigo_Vendedor: $("#idAdministrador").val(),
-            numero_orden: numero_orden
-        }, function (returnedData) {
-            returned = JSON.parse(returnedData);
-            if (returned.error == false) {
-                Swal.fire({
-                    title: "Comisariato del Constructor",
-                    text: "Cotización actualizada con éxito!",
-                    icon: "success",
-                    showCancelButton: false,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Ver detalle"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "ver_detalle.php?q=" + returned.numero_orden;
-                    }
-                });
-
-                sessionStorage.removeItem('cartUpdate'); // Eliminar datos expirados
-                sessionStorage.removeItem('cartTimestampUpdate');
-                sessionStorage.removeItem('id_clienteUpdate');
-
-                sessionStorage.removeItem('cart'); // Eliminar datos expirados
-                sessionStorage.removeItem('cartTimestamp');
-                sessionStorage.removeItem('id_cliente');
-            }
-        });
+        return;
     }
+
+    Swal.fire({
+        title: `¿Está seguro de facturar la Cotización #${numero_orden}?`,
+        text: "Se generará la factura con los datos actuales",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Facturar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const detalle = cartPago.map(item => ({
+                codigo_Producto: item.Codigo_Producto,
+                cantidad: item.cantidad
+            }));
+
+            $.post("../api/v1/constructor/facturar", {
+                numeroCotizacion: numero_orden,
+                codigo_Cliente: idClienteGuardado,
+                bodega: $("#codtienda").val(),
+                metodoPago: metodoPago,  
+                cobrador: $("#idAdministrador").val(),
+            }, function (returnedData) {
+                const returned = JSON.parse(returnedData);
+                if (returned.error == false) {
+                    Swal.fire({
+                        title: "Factura generada con éxito!",
+                        html: "Número de Factura: <b>" + returned.numeroFactura +"</b><br>Solicite su factura en Caja.",
+                        icon: "success",
+                        confirmButtonText: "Ver detalle"
+                    }).then((nextResult) => {
+                        if (nextResult.isConfirmed) {
+                            window.location.href = "ver_cotizaciones.php";
+                        }
+                    });
+                    sessionStorage.removeItem('cartUpdate');
+                    sessionStorage.removeItem('cartTimestampUpdate');
+                    sessionStorage.removeItem('id_clienteUpdate');
+                    sessionStorage.removeItem('cart');
+                    sessionStorage.removeItem('cartTimestamp');
+                    sessionStorage.removeItem('id_cliente');
+                }
+            });
+        }
+    });
 }
 
 

@@ -1358,6 +1358,42 @@ class DbHandler
         return $responseSucursal;
     }
     
+    public function crearFacturaApi($numeroCotizacion, $codigo_Cliente, $bodega, $metodoPago, $cobrador)
+    {
+        $token = $this->getTokenApi()["token"];
+        $curl = curl_init();
+        $data = array(
+            "numeroCotizacion" => $numeroCotizacion,
+            "codigo_Cliente" => $codigo_Cliente,
+            "bodega" => $bodega,
+            "metodoPago" => $metodoPago,
+            "cobrador" => $cobrador
+        );
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://192.168.1.94:14460/api/Factura/facturar',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        // Decodificar la respuesta
+        $responsefactura = json_decode($response, true);
+
+        return $responsefactura;
+    }
 
     /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */
 }
