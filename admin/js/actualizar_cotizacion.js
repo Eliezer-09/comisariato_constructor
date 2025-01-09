@@ -47,9 +47,9 @@ $(document).ready(function () {
             data: function (params) {
                 // Validar si el término es un número o contiene letras
                 const isNumber = /^\d+$/.test(params.term.trim());
-
+                const upperTerm = params.term ? params.term.toUpperCase() : '';
                 return {
-                    nombre: params.term.trim(),
+                    nombre: upperTerm.trim(),
                     type: isNumber ? 'ruc' : 'nombre', // Enviar el tipo de búsqueda
                     codigovendedor: ""
                 };
@@ -766,7 +766,7 @@ function validarNombreCliente() {
     var texto = nombre_cliente.val();
 
     // Convertir solo la primera letra en mayúscula y el resto en minúscula
-    texto = texto.toLowerCase().replace(/^\w/, (char) => char.toUpperCase());
+    texto = texto.toUpperCase().replace(/[^A-ZÑ\s]/g, '');
     nombre_cliente.val(texto);
 }
 
