@@ -100,8 +100,35 @@ $(document).ready(function () {
                             metodo = `<span class="badge badge rounded-pill d-block badge-subtle-warning">No Asignado<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>`
                         }
 
+                        var rowClass = "";
+                        let acciones = "";
+                        if (!cotizacion.factura) {
+                            rowClass = "";
+                            // Mostrar todas las acciones
+                            acciones = `
+                                <a class="btn btn-md text-white fw-bold" style="background-color: #0f3d53" href="actualizar_cotizacion.php?q=${cotizacion.codigo_Orden}"><i class="far fa-edit"></i></a>
+                                <a class="btn btn-md text-white fw-bold ms-2" style="background-color: #e84e0f" href="ver_detalle.php?q=${cotizacion.codigo_Orden}"><i class="far fa-eye"></i></a>
+                                <a class="btn btn-md text-white fw-bold ms-2 solicitar-descuento" style="background-color: #28a745" data-codigo-orden="${cotizacion.codigo_Orden}">
+                                    <i class="fas fa-percentage"></i>
+                                </a>
+                            `;
+                        } else {
+                            rowClass = "facturada-row";
+                            // Bloquear todas las acciones excepto ver detalle
+                            acciones = `
+                                <a class="btn btn-md text-white fw-bold ms-2" style="background-color: #e84e0f" href="ver_detalle.php?q=${cotizacion.codigo_Orden}">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a class="btn btn-md text-white fw-bold ms-2 block-facturada" style="background-color: #0f3d53" data-factura="${cotizacion.factura}">
+                                    <i class="far fa-edit"></i>
+                                </a>
+                                <a class="btn btn-md text-white fw-bold ms-2 block-facturada" style="background-color: #28a745" data-factura="${cotizacion.factura}">
+                                    <i class="fas fa-percentage"></i>
+                                </a>
+                            `;
+                        }
                         $('#listarCotizacion').append(`
-                            <tr>
+                            <tr class="${rowClass}">
                                 <td class="text-center">${cotizacion.nombre_Cliente}</td>
                                 <td class="text-center">${cotizacion.codigo_Orden}</td>
                                 <td class="text-center">${cotizacion.detalle.length}</td>
@@ -111,12 +138,8 @@ $(document).ready(function () {
                                 <td class="text-center">${metodo}</td>
                                 <td class="text-center">${fechaConvertida}</td>
                                 <td class="text-center d-flex justify-content-center align-items-center">
-                                    <a class="btn btn-md text-white fw-bold" style="background-color: #0f3d53" href="actualizar_cotizacion.php?q=${cotizacion.codigo_Orden}"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-md text-white fw-bold ms-2" style="background-color: #e84e0f" href="ver_detalle.php?q=${cotizacion.codigo_Orden}"><i class="far fa-eye"></i></a>
-                                    <a class="btn btn-md text-white fw-bold ms-2 solicitar-descuento" style="background-color: #28a745" data-codigo-orden="${cotizacion.codigo_Orden}">
-                                        <i class="fas fa-percentage"></i>
-                                    </a>
-                                </td>
+                                    ${acciones}
+                                </td>                                                       
                             </tr>
                         `);
                     });
@@ -253,6 +276,17 @@ $(document).ready(function () {
 
         // Llamar a la función definida en descuento.js
         solicitarDescuento(codigoOrden, codigoTienda, nombreCuenta);
+    });
+
+    $('#listarCotizacion').on('click', '.block-facturada', function(e) {
+        e.preventDefault();
+        const factura = $(this).data('factura');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cotización Facturada',
+            text: 'Esta cotización ya fue facturada. Factura: ' + factura,
+            confirmButtonText: 'Aceptar'
+        });
     });
 
 });

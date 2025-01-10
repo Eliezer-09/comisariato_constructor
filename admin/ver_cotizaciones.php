@@ -36,6 +36,12 @@ require 'includes/header2.php';
         text-align: center;
         margin: 20px 0;
     }
+    .facturada-row {
+        background-color:rgb(228, 253, 230) !important; 
+    }
+    #cabeceraTable tbody tr {
+        background-color: #fff !important;
+    }
 </style>
 
 <div class="content">
@@ -90,7 +96,7 @@ require 'includes/header2.php';
                         </div>
                     </div>
                     <div class="table-responsive scrollbar">
-                        <table class="table table-bordered table-striped" id="cabeceraTable">
+                        <table class="table table-bordered" id="cabeceraTable">
                             <thead class="text-900" id="listBusquedaA">
                                 <tr>
                                     <th class="text-center bg-200" data-sort="name">Cliente</th>
