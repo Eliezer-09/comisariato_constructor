@@ -392,7 +392,6 @@ $app->post('/constructor/getProductoApiBuscar', function ($request, $response) {
     $codigoSubgrupo = $request->getParsedBody()['codigoSubgrupo'];
     $codigo_Tienda = $request->getParsedBody()['codigo_Tienda'];
     $opcionBusqueda = $request->getParsedBody()['opcionBusqueda'];
-
     $page = $request->getParsedBody()['page'];
     $pageSize = $request->getParsedBody()['pageSize'];
 
@@ -401,8 +400,33 @@ $app->post('/constructor/getProductoApiBuscar', function ($request, $response) {
     $response = array();
     $db = new DbHandler();
     $resultado = $db->getProductoApiBuscar($codigo_Empresa, $codigo_Sucursal, $nombre, $codigoLinea, $codigoGrupo, $codigoSubgrupo, $codigo_Tienda, $codigoMarca, $opcionBusqueda, $page, $pageSize);
+
     $response["error"] = false;
-    // $response["totalProductos"] = $db->getProductoApiHeaders($codigo_Empresa, $codigo_Sucursal, $nombre, $codigoLinea, $codigoGrupo, $codigoSubgrupo, $codigo_Tienda, $codigoMarca, $opcionBusqueda, $page, $pageSize);
+    $response["productos"] = $resultado;
+
+    echo json_encode($response);
+});
+
+$app->post('/constructor/getProductoApiBuscar2', function ($request, $response) {
+
+    $codigo_Empresa = $request->getParsedBody()['codigo_Empresa'];
+    $codigo_Sucursal = $request->getParsedBody()['codigo_Sucursal'];
+    $nombre = $request->getParsedBody()['nombre'];
+    $codigoLinea = $request->getParsedBody()['codigoLinea'];
+    $codigoMarca = $request->getParsedBody()['codigoMarca'];
+    $codigoGrupo = $request->getParsedBody()['codigoGrupo'];
+    $codigoSubgrupo = $request->getParsedBody()['codigoSubgrupo'];
+    $codigo_Tienda = $request->getParsedBody()['codigo_Tienda'];
+    $opcionBusqueda = $request->getParsedBody()['opcionBusqueda'];
+    $page = $request->getParsedBody()['page'];
+    $pageSize = $request->getParsedBody()['pageSize'];
+
+    $opcionBusqueda = $request->getParsedBody()['opcionBusqueda'];
+
+    $response = array();
+    $db = new DbHandler();
+    $resultado = $db->getProductoApiBuscar2( $codigo_Empresa, $codigo_Sucursal, $nombre, $codigoLinea, $codigoGrupo, $codigoSubgrupo, $codigo_Tienda, $codigoMarca, $opcionBusqueda, $page, $pageSize);
+    $response["error"] = false;
     $response["productos"] = $resultado;
 
     echo json_encode($response);
@@ -595,8 +619,6 @@ $app->post('/constructor/guardar_cotizacionApi/', function ($request, $response)
 
 /* ACTUALIZAR COTIZACIÓN */
 $app->post('/constructor/actualizar_cotizacionApi/', function ($request, $response) {
-
-
     $codigo_Cliente = $request->getParsedBody()['codigo_Cliente'];
     $detalle = $request->getParsedBody()['detalle'];
     $forma_Pago = $request->getParsedBody()['forma_Pago'];
@@ -618,20 +640,19 @@ $app->post('/constructor/actualizar_cotizacionApi/', function ($request, $respon
 
 
 $app->post('/constructor/getCotizacionesApi', function ($request, $response, $args) {
-    // $id_administrador = $args['id'];
+    $parsedBody = $request->getParsedBody();
 
-    $codigoCotizacion   = $request->getParsedBody()['codigoCotizacion'];
-    $codigoTienda   = $request->getParsedBody()['codigoTienda'];
-    $codigoEmp   = $request->getParsedBody()['codigoEmp'];
-    $codigoSuc   = $request->getParsedBody()['codigoSuc'];
-    $rucCliente   = $request->getParsedBody()['rucCliente'];
-    $page   = $request->getParsedBody()['page'];
-    $pageSize   = $request->getParsedBody()['pageSize'];
-    $codigovendedor   = $request->getParsedBody()['codigovendedor'];
-    $nombreCliente   = $request->getParsedBody()['nombreCliente'];
-
-    $fechaInicio   = $request->getParsedBody()['fechaInicio'];
-    $fechaFin   = $request->getParsedBody()['fechaFin'];
+    $codigoCotizacion = $parsedBody['codigoCotizacion'] ?? null;
+    $codigoTienda = $parsedBody['codigoTienda'] ?? null;
+    $codigoEmp = $parsedBody['codigoEmp'] ?? null;
+    $codigoSuc = $parsedBody['codigoSuc'] ?? null;
+    $rucCliente = $parsedBody['rucCliente'] ?? null;
+    $page = $parsedBody['page'] ?? null;
+    $pageSize = $parsedBody['pageSize'] ?? null;
+    $codigovendedor = $parsedBody['codigovendedor'] ?? null;
+    $nombreCliente = $parsedBody['nombreCliente'] ?? null;
+    $fechaInicio = $parsedBody['fechaInicio'] ?? null;
+    $fechaFin = $parsedBody['fechaFin'] ?? null;
 
     $response = array();
     $db = new DbHandler();
@@ -639,8 +660,6 @@ $app->post('/constructor/getCotizacionesApi', function ($request, $response, $ar
 
     $response["error"] = false;
     $response["cotizacion"] = $resultado;
-
-    // $response["totalCotizacion"] = $db->getCotizacionesApiHeader($codigoCotizacion, $codigoTienda, $codigoEmp, $codigoSuc, $rucCliente);
 
     echo json_encode($response);
 });
@@ -680,6 +699,97 @@ $app->get('/constructor/stock', function ($request, $response, $args) {
     $result = $db->stock($codigoProducto);
     return $response->withJson($result);
 });
+
+$app->post('/constructor/facturar', function ($request, $response) {
+    // 1) Obtener parámetros
+    $numeroCotizacion = $request->getParsedBody()['numeroCotizacion'] ?? '';
+    $codigo_Cliente   = $request->getParsedBody()['codigo_Cliente']   ?? '';
+    $bodega           = $request->getParsedBody()['bodega']           ?? '';
+    $metodoPago       = $request->getParsedBody()['metodoPago']       ?? '';
+    $cobrador         = $request->getParsedBody()['cobrador']         ?? '';
+
+    // 2) Validar parámetros obligatorios
+    //    Si alguno está vacío, devolvemos error inmediato
+    if (empty($numeroCotizacion) || empty($codigo_Cliente) || empty($bodega) || empty($metodoPago) || empty($cobrador)) {
+        $responseData = [
+            "error" => true,
+            "mssg"  => "Los campos numeroCotizacion, codigo_Cliente, bodega, metodoPago y cobrador son obligatorios."
+        ];
+        echo json_encode($responseData);
+        return $response;
+    }
+
+    // 3) Llamar a DBHandler
+    $db = new DbHandler();
+    $resultado = $db->crearFacturaApi($numeroCotizacion, $codigo_Cliente, $bodega, $metodoPago, $cobrador);
+
+    // Estructura por defecto en la respuesta final
+    $responseData = [
+        "error" => false,
+        "mssg"  => "",
+        "numeroFactura" => null
+    ];
+
+    // 4) Validar el código HTTP
+    //    Por ejemplo, si es >= 400, interpretamos un error
+    $httpcode = $resultado['statusCode'] ?? 0;
+    if ($httpcode >= 400) {
+        // Forzamos error
+        $responseData["error"] = true;
+        // Podemos usar 'mssg' del backend si existe, sino, un genérico
+        $responseData["mssg"]  = $resultado['mssg'] ?? "Error HTTP " . $httpcode . " al generar la factura.";
+        
+        // Si el backend .NET devolvió 'productosFaltantes'
+        if (isset($resultado['productosFaltantes'])) {
+            $responseData["productosFaltantes"] = $resultado['productosFaltantes'];
+        }
+
+        // Devolvemos la respuesta
+        echo json_encode($responseData);
+        return $response;
+    }
+
+    // 5) Ahora procesamos la respuesta JSON que retornó .NET
+    //    Manejo similar al que ya tenías:
+
+    if (!is_array($resultado)) {
+        // El backend no devolvió JSON válido o la solicitud falló
+        $responseData["error"] = true;
+        $responseData["mssg"]  = "Respuesta inesperada del servidor.";
+    } else {
+        // Revisar si hay mensaje de error por stock u otro
+        // 5.1) "mssg" con la palabra "error"
+        if (isset($resultado['mssg']) && (strpos(strtolower($resultado['mssg']), 'error') !== false)) {
+            $responseData["error"] = true;
+            $responseData["mssg"]  = $resultado['mssg'];
+            if (isset($resultado['productosFaltantes'])) {
+                $responseData["productosFaltantes"] = $resultado['productosFaltantes'];
+            }
+        }
+        // 5.2) Si hay productosFaltantes sin la palabra "error" en mssg
+        else if (isset($resultado['productosFaltantes'])) {
+            $responseData["error"] = true;
+            $responseData["mssg"]  = $resultado['mssg'] ?? "No hay stock suficiente.";
+            $responseData["productosFaltantes"] = $resultado['productosFaltantes'];
+        }
+        // 5.3) Caso de éxito: se asume que hay "numeroFactura"
+        else if (isset($resultado['mssg']) && isset($resultado['numeroFactura'])) {
+            $responseData["error"]         = false;
+            $responseData["mssg"]          = $resultado['mssg'];
+            $responseData["numeroFactura"] = $resultado['numeroFactura'];
+        }
+        // 5.4) Caso desconocido
+        else {
+            $responseData["error"] = true;
+            $responseData["mssg"]  = $resultado['mssg'] ?? "No se pudo generar la factura por razones desconocidas.";
+        }
+    }
+
+    // 6) Imprimir la respuesta final como JSON
+    echo json_encode($responseData);
+    return $response;
+});
+
 
 /* ======================= DATOS DE LA API DE COMISARIATO DEL CONSTRUCTOR ======================== */
 
